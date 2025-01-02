@@ -115,31 +115,47 @@ class ModelEvaluator:
 
         return fig
 
-    def plot_predictions(self, model_name: str) -> go.Figure:
-        """Plot actual vs predicted values for a specific model."""
-        metrics = self.metrics[model_name]
-
+    def plot_predictions(self) -> go.Figure:
+        """Plot actual vs predicted values for all models with their corresponding actual values."""
         fig = go.Figure()
+        colors = ['red', 'blue', 'green', 'purple', 'orange']
 
-        fig.add_trace(go.Scatter(
-            y=metrics.actual_values,
-            name='Actual',
-            mode='lines',
-            line=dict(color='blue')
-        ))
+        for idx, (model_name, metrics) in enumerate(self.metrics.items()):
+            fig.add_trace(go.Scatter(
+                y=metrics.actual_values,
+                name=f'Actual ({model_name})',
+                mode='lines',
+                line=dict(color='black', width=2, dash='solid'),
+                showlegend=idx == 0
+            ))
 
-        fig.add_trace(go.Scatter(
-            y=metrics.predictions,
-            name='Predicted',
-            mode='lines',
-            line=dict(color='red')
-        ))
+            fig.add_trace(go.Scatter(
+                y=metrics.predictions,
+                name=f'{model_name} Predictions',
+                mode='lines',
+                line=dict(
+                    color=colors[idx % len(colors)],
+                    width=1.5,
+                    dash='dot'
+                ),
+                customdata=[[metrics.rmse, metrics.mae, metrics.r2]],
+                hovertemplate=(
+                    f"<b>{model_name}</b><br>"
+                    "Predicted: %{y:.4f}<br>"
+                    "RMSE: %{customdata[0][0]:.4f}<br>"
+                    "MAE: %{customdata[0][1]:.4f}<br>"
+                    "R²: %{customdata[0][2]:.4f}<br>"
+                    "<extra></extra>"
+                )
+            ))
 
         fig.update_layout(
-            title=f'{model_name} - Actual vs Predicted Values',
+            title='Model Predictions Comparison',
             xaxis_title='Sample Index',
-            yaxis_title='Value',
-            showlegend=True
+            yaxis_title='Exchange Rate Value',
+            plot_bgcolor='white',
+            legend=dict(yanchor="top", y=0.99, xanchor="right", x=0.99, bgcolor='rgba(255, 255, 255, 0.8)'),
+            hovermode='x unified'
         )
 
         return fig

@@ -29,7 +29,7 @@ def run_model_comparison(X: pd.DataFrame, y: pd.Series) -> Tuple[str, BaseModel,
     comparison_plot.show()
 
     # Plot best model predictions
-    predictions_plot = evaluator.plot_predictions(best_model_name)
+    predictions_plot = evaluator.plot_predictions()
     predictions_plot.show()
 
     print(f"\nBest Model: {best_model_name}")

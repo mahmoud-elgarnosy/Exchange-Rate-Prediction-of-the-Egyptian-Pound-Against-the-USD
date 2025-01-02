@@ -8,6 +8,12 @@ The system uses multiple models (Random Forest, XGBoost, SVM, and Linear Regress
 - Lowest RMSE (0.1364)
 - Lowest MAE (0.0939)
 - Highest R² score (0.906)
+- 
+![alt text](plots/comparison.PNG "Title")
+![alt text](plots/evaluation_models.PNG "Title")
+
+
+
 
 ## Installation
 
